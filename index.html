@@ -1,0 +1,1563 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Positivamente - Sua Jornada de Libertação</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/index.css">
+</head>
+<body>
+    <!-- Tela de Login -->
+    <div id="loginContainer" class="login-container">
+        <div class="login-left">
+            <h1>Positivamente</h1>
+            <p>Sua jornada de libertação do tabagismo começa aqui. Junte-se a milhares de pessoas que já transformaram suas vidas.</p>
+            
+            <div class="features">
+                <div class="feature">
+                    <i class="fas fa-users"></i>
+                    <h4>Comunidade</h4>
+                    <p>Conecte-se com outros</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-chart-line"></i>
+                    <h4>Progresso</h4>
+                    <p>Acompanhe sua evolução</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-heart"></i>
+                    <h4>Saúde</h4>
+                    <p>Monitore benefícios</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-gift"></i>
+                    <h4>Recompensas</h4>
+                    <p>Ganhe por indicações</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="login-right">
+            <div class="login-form">
+                <div class="form-tabs">
+                    <button class="tab-button active" onclick="switchTab('login')">Entrar</button>
+                    <button class="tab-button" onclick="switchTab('register')">Cadastrar</button>
+                </div>
+                
+                <!-- Formulário de Login -->
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Senha</label>
+                        <input type="password" id="loginPassword" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Entrar</button>
+                </form>
+                
+                <!-- Formulário de Cadastro -->
+                <form id="registerForm" class="hidden" onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label for="registerName">Nome Completo</label>
+                        <input type="text" id="registerName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerEmail">Email</label>
+                        <input type="email" id="registerEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPassword">Senha</label>
+                        <input type="password" id="registerPassword" required minlength="6">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirmar Senha</label>
+                        <input type="password" id="confirmPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="referralCode">Código de Indicação (opcional)</label>
+                        <input type="text" id="referralCode" placeholder="Ex: POS123ABC">
+                    </div>
+                    <button type="submit" class="btn-primary">Criar Conta</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interface Principal -->
+    <div id="appContainer" class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-leaf"></i>
+                Positivamente
+            </div>
+            
+            <div class="search-bar">
+                <input type="text" placeholder="Buscar inspiração...">
+            </div>
+            
+            <div class="social-links">
+                <a href="https://facebook.com/positibraz" class="social-link facebook" title="Facebook @positibraz">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="https://instagram.com/positibraz" class="social-link instagram" title="Instagram @positibraz">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://tiktok.com/@positibraz" class="social-link tiktok" title="TikTok @positibraz">
+                    <i class="fab fa-tiktok"></i>
+                </a>
+                <a href="https://x.com/positibraz" class="social-link twitter" title="X @positibraz">
+                    <i class="fab fa-twitter"></i>
+                </a>
+            </div>
+            
+            <div class="user-menu">
+                <div class="user-avatar" id="userAvatar">JS</div>
+            </div>
+        </header>
+
+        <!-- Layout Principal -->
+        <main class="main-layout">
+            <!-- Sidebar Esquerda -->
+            <aside class="left-sidebar">
+                <div class="profile-card">
+                    <div class="profile-avatar" id="profileAvatar">JS</div>
+                    <div class="profile-name" id="profileName">João Silva</div>
+                    <div class="profile-status">Em jornada de libertação</div>
+                    <div class="profile-stats">
+                        <div class="stat">
+                            <div class="stat-value" id="daysFree">0</div>
+                            <div class="stat-label">Dias livres</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value" id="moneySaved">R$ 0.00</div>
+                            <div class="stat-label">Economizado</div>
+                        </div>
+                    </div>
+                </div>
+
+                <nav class="nav-menu">
+                    <a class="nav-link active" onclick="showSection('feed')">
+                        <i class="fas fa-home"></i>
+                        Feed Principal
+                    </a>
+                    <a class="nav-link" onclick="showSection('profile')">
+                        <i class="fas fa-user"></i>
+                        Meu Perfil
+                    </a>
+                    <a class="nav-link" onclick="showSection('family')">
+                        <i class="fas fa-sitemap"></i>
+                        Árvore Genealógica
+                        <span class="nav-badge">8</span>
+                    </a>
+                    <a class="nav-link" onclick="showSection('referral')">
+                        <i class="fas fa-users"></i>
+                        Sistema de Indicações
+                        <span class="nav-badge">9</span>
+                    </a>
+                    <a class="nav-link" onclick="showSection('anamnese')">
+                        <i class="fas fa-clipboard-list"></i>
+                        Anamnese
+                        <span class="nav-badge">10</span>
+                    </a>
+                    <a class="nav-link" onclick="showSection('imc')">
+                        <i class="fas fa-calculator"></i>
+                        Calculadora IMC
+                        <span class="nav-badge">1</span>
+                    </a>
+                    <a class="nav-link" onclick="showSection('smoking')">
+                        <i class="fas fa-smoking-ban"></i>
+                        Seção de Fumantes
+                        <span class="nav-badge">12</span>
+                    </a>
+                    <a class="nav-link" onclick="showSection('community')">
+                        <i class="fas fa-comments"></i>
+                        Comunidade
+                        <span class="nav-badge">15</span>
+                    </a>
+                </nav>
+            </aside>
+
+            <!-- Conteúdo Principal -->
+            <div class="main-content">
+                <!-- Feed Principal -->
+                <section id="feedSection" class="content-section active">
+                    <div class="section-header">
+                        <i class="fas fa-home"></i>
+                        <div>
+                            <h2 class="section-title">Feed Principal</h2>
+                            <p class="section-subtitle">Acompanhe as atividades da comunidade, conexões e atualizações</p>
+                        </div>
+                    </div>
+
+                    <!-- Composer de Posts -->
+                    <div class="post-composer">
+                        <div class="composer-header">
+                            <div class="composer-avatar" id="composerAvatar">JS</div>
+                            <div class="composer-input">
+                                <textarea id="postContent" placeholder="Compartilhe uma conquista, experiência ou inspire alguém..."></textarea>
+                            </div>
+                        </div>
+                        <div class="composer-actions">
+                            <div class="media-buttons">
+                                <button class="media-btn photo">
+                                    <i class="fas fa-camera"></i>
+                                    Foto
+                                </button>
+                                <button class="media-btn video">
+                                    <i class="fas fa-video"></i>
+                                    Vídeo
+                                </button>
+                                <button class="media-btn feeling">
+                                    <i class="fas fa-smile"></i>
+                                    Sentimento
+                                </button>
+                            </div>
+                            <button class="post-btn" onclick="createPost()">Publicar</button>
+                        </div>
+                    </div>
+
+                    <!-- Feed de Posts -->
+                    <div id="postsContainer">
+                        <!-- Posts serão inseridos aqui -->
+                    </div>
+                </section>
+
+                <!-- Meu Perfil -->
+                <section id="profileSection" class="content-section">
+                    <div class="section-header">
+                        <i class="fas fa-user"></i>
+                        <div>
+                            <h2 class="section-title">Meu Perfil</h2>
+                            <p class="section-subtitle">Gerencie suas informações pessoais e acompanhe seu progresso</p>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-section">
+                            <h3>Informações Pessoais</h3>
+                            <div class="form-group">
+                                <label for="profileFullName">Nome Completo</label>
+                                <input type="text" id="profileFullName">
+                            </div>
+                            <div class="form-group">
+                                <label for="profileEmail">Email</label>
+                                <input type="email" id="profileEmail">
+                            </div>
+                            <div class="form-group">
+                                <label for="profilePhone">Telefone</label>
+                                <input type="tel" id="profilePhone">
+                            </div>
+                            <div class="form-group">
+                                <label for="profileBirthdate">Data de Nascimento</label>
+                                <input type="date" id="profileBirthdate">
+                            </div>
+                            <div class="form-group">
+                                <label for="profileCity">Cidade</label>
+                                <input type="text" id="profileCity">
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3>Sistema de Indicações</h3>
+                            <div class="form-group">
+                                <label for="myReferralCode">Meu Código de Indicação</label>
+                                <input type="text" id="myReferralCode" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="referralBalance">Saldo de Indicações</label>
+                                <input type="text" id="referralBalance" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="totalReferrals">Total de Indicações</label>
+                                <input type="number" id="totalReferrals" readonly>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3>Estatísticas Pessoais</h3>
+                            <div class="form-group">
+                                <label for="personalDaysFree">Dias Sem Fumar</label>
+                                <input type="number" id="personalDaysFree" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="personalMoneySaved">Dinheiro Economizado</label>
+                                <input type="text" id="personalMoneySaved" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="cigarettesNotSmoked">Cigarros Não Fumados</label>
+                                <input type="number" id="cigarettesNotSmoked" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn-save" onclick="saveProfile()">Salvar Perfil</button>
+                </section>
+
+                <!-- Árvore Genealógica -->
+                <section id="familySection" class="content-section">
+                    <div class="section-header">
+                        <i class="fas fa-sitemap"></i>
+                        <div>
+                            <h2 class="section-title">Árvore Genealógica</h2>
+                            <p class="section-subtitle">Conecte-se com familiares e construa sua rede de apoio</p>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-section">
+                            <h3>Adicionar Familiar</h3>
+                            <div class="form-group">
+                                <label for="familyName">Nome do Familiar</label>
+                                <input type="text" id="familyName">
+                            </div>
+                            <div class="form-group">
+                                <label for="familyRelation">Parentesco</label>
+                                <select id="familyRelation">
+                                    <option value="">Selecione...</option>
+                                    <option value="pai">Pai</option>
+                                    <option value="mae">Mãe</option>
+                                    <option value="irmao">Irmão</option>
+                                    <option value="irma">Irmã</option>
+                                    <option value="filho">Filho</option>
+                                    <option value="filha">Filha</option>
+                                    <option value="avo">Avô</option>
+                                    <option value="avo">Avó</option>
+                                    <option value="tio">Tio</option>
+                                    <option value="tia">Tia</option>
+                                    <option value="primo">Primo</option>
+                                    <option value="prima">Prima</option>
+                                    <option value="conjuge">Cônjuge</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="familyEmail">Email (opcional)</label>
+                                <input type="email" id="familyEmail">
+                            </div>
+                            <button class="btn-save" onclick="addFamilyMember()">Adicionar à Árvore</button>
+                        </div>
+
+                        <div class="form-section">
+                            <h3>Minha Árvore Familiar</h3>
+                            <div id="familyTree">
+                                <!-- Árvore familiar será exibida aqui -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Sistema de Indicações -->
+                <section id="referralSection" class="content-section">
+                    <div class="section-header">
+                        <i class="fas fa-users"></i>
+                        <div>
+                            <h2 class="section-title">Sistema de Indicações</h2>
+                            <p class="section-subtitle">Ganhe R$ 10,00 por cada pessoa que você indicar para a plataforma</p>
+                        </div>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="referralEarnings">R$ 0,00</div>
+                            <div class="stat-description">Total Ganho</div>
+                        </div>
+                        <div class="stat-card secondary">
+                            <div class="stat-value" id="referralCount">0</div>
+                            <div class="stat-description">Indicações Confirmadas</div>
+                        </div>
+                        <div class="stat-card tertiary">
+                            <div class="stat-value" id="pendingReferrals">0</div>
+                            <div class="stat-description">Indicações Pendentes</div>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-section">
+                            <h3>Seu Código de Indicação</h3>
+                            <div class="form-group">
+                                <label for="displayReferralCode">Compartilhe este código</label>
+                                <input type="text" id="displayReferralCode" readonly>
+                            </div>
+                            <button class="btn-save" onclick="copyReferralCode()">Copiar Código</button>
+                            <button class="btn-save" onclick="shareReferralCode()">Compartilhar</button>
+                        </div>
+
+                        <div class="form-section">
+                            <h3>Como Funciona</h3>
+                            <p><strong>1.</strong> Compartilhe seu código único com amigos e familiares</p>
+                            <p><strong>2.</strong> Quando alguém se cadastrar usando seu código, você ganha R$ 10,00</p>
+                            <p><strong>3.</strong> O valor é creditado automaticamente em sua conta</p>
+                            <p><strong>4.</strong> Não há limite de indicações!</p>
+                        </div>
+                    </div>
+
+                    <div id="referralHistory">
+                        <h3>Histórico de Indicações</h3>
+                        <!-- Histórico será exibido aqui -->
+                    </div>
+                </section>
+
+                <!-- Anamnese -->
+                <section id="anamneseSection" class="content-section">
+                    <div class="section-header">
+                        <i class="fas fa-clipboard-list"></i>
+                        <div>
+                            <h2 class="section-title">Anamnese</h2>
+                            <p class="section-subtitle">Questionário médico para personalizar suas recomendações</p>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-section">
+                            <h3>Dados Pessoais</h3>
+                            <div class="form-group">
+                                <label for="anamneseAge">Idade</label>
+                                <input type="number" id="anamneseAge" min="18" max="100">
+                            </div>
+                            <div class="form-group">
+                                <label for="anamneseSex">Sexo</label>
+                                <select id="anamneseSex">
+                                    <option value="">Selecione...</option>
+                                    <option value="masculino">Masculino</option>
+                                    <option value="feminino">Feminino</option>
+                                    <option value="outro">Outro</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="anamneseWeight">Peso (kg)</label>
+                                <input type="number" id="anamneseWeight" min="30" max="300" step="0.1">
+                            </div>
+                            <div class="form-group">
+                                <label for="anamneseHeight">Altura (cm)</label>
+                                <input type="number" id="anamneseHeight" min="100" max="250">
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3>Histórico de Tabagismo</h3>
+                            <div class="form-group">
+                                <label for="smokingTime">Fumante há quanto tempo?</label>
+                                <select id="smokingTime">
+                                    <option value="">Selecione...</option>
+                                    <option value="menos-1-ano">Menos de 1 ano</option>
+                                    <option value="1-5-anos">1 a 5 anos</option>
+                                    <option value="6-10-anos">6 a 10 anos</option>
+                                    <option value="11-20-anos">11 a 20 anos</option>
+                                    <option value="mais-20-anos">Mais de 20 anos</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="cigarettesPerDay">Cigarros por dia</label>
+                                <input type="number" id="cigarettesPerDay" min="1" max="100">
+                            </div>
+                            <div class="form-group">
+                                <label for="quitAttempts">Tentativas anteriores de parar</label>
+                                <input type="number" id="quitAttempts" min="0" max="50">
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3>Saúde</h3>
+                            <div class="form-group">
+                                <label for="heartProblems">Tem problemas cardíacos?</label>
+                                <select id="heartProblems">
+                                    <option value="">Selecione...</option>
+                                    <option value="sim">Sim</option>
+                                    <option value="nao">Não</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="medications">Medicamentos em uso</label>
+                                <textarea id="medications" rows="3" placeholder="Liste os medicamentos que você usa regularmente"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="allergies">Alergias</label>
+                                <textarea id="allergies" rows="2" placeholder="Descreva suas alergias, se houver"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3>Contexto Social</h3>
+                            <div class="form-group">
+                                <label for="familySmokers">Há fumantes na família?</label>
+                                <select id="familySmokers">
+                                    <option value="">Selecione...</option>
+                                    <option value="sim">Sim</option>
+                                    <option value="nao">Não</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="otherDrugs">Usa outras drogas?</label>
+                                <select id="otherDrugs">
+                                    <option value="">Selecione...</option>
+                                    <option value="sim">Sim</option>
+                                    <option value="nao">Não</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="socialSupport">Apoio familiar/social</label>
+                                <select id="socialSupport">
+                                    <option value="">Selecione...</option>
+                                    <option value="muito">Muito apoio</option>
+                                    <option value="moderado">Apoio moderado</option>
+                                    <option value="pouco">Pouco apoio</option>
+                                    <option value="nenhum">Nenhum apoio</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn-save" onclick="saveAnamnese()">Salvar Anamnese</button>
+
+                    <div id="anamneseResults" style="display: none;">
+                        <h3>Suas Recomendações Personalizadas</h3>
+                        <div id="weeklyRecommendations">
+                            <!-- Recomendações serão exibidas aqui -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Calculadora IMC -->
+                <section id="imcSection" class="content-section">
+                    <div class="section-header">
+                        <i class="fas fa-calculator"></i>
+                        <div>
+                            <h2 class="section-title">Calculadora IMC</h2>
+                            <p class="section-subtitle">Calcule seu Índice de Massa Corporal para auxiliar na avaliação</p>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-section">
+                            <h3>Calcular IMC</h3>
+                            <div class="form-group">
+                                <label for="imcWeight">Peso (kg)</label>
+                                <input type="number" id="imcWeight" min="30" max="300" step="0.1" placeholder="Ex: 70.5">
+                            </div>
+                            <div class="form-group">
+                                <label for="imcHeight">Altura (cm)</label>
+                                <input type="number" id="imcHeight" min="100" max="250" placeholder="Ex: 175">
+                            </div>
+                            <button class="btn-save" onclick="calculateIMC()">Calcular IMC</button>
+                        </div>
+
+                        <div class="form-section">
+                            <h3>Resultado</h3>
+                            <div id="imcResult" style="display: none;">
+                                <!-- Resultado do IMC será exibido aqui -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="imc-table">
+                        <h3>Tabela de Classificação IMC</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>IMC</th>
+                                    <th>Classificação</th>
+                                    <th>Grau de Obesidade</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Menor que 18,5</td>
+                                    <td>Abaixo do peso</td>
+                                    <td>0</td>
+                                </tr>
+                                <tr>
+                                    <td>18,5 - 24,9</td>
+                                    <td>Peso normal</td>
+                                    <td>0</td>
+                                </tr>
+                                <tr>
+                                    <td>25,0 - 29,9</td>
+                                    <td>Sobrepeso</td>
+                                    <td>I</td>
+                                </tr>
+                                <tr>
+                                    <td>30,0 - 34,9</td>
+                                    <td>Obesidade</td>
+                                    <td>II</td>
+                                </tr>
+                                <tr>
+                                    <td>35,0 - 39,9</td>
+                                    <td>Obesidade severa</td>
+                                    <td>III</td>
+                                </tr>
+                                <tr>
+                                    <td>Maior que 40,0</td>
+                                    <td>Obesidade mórbida</td>
+                                    <td>IV</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Seção de Fumantes -->
+                <section id="smokingSection" class="content-section">
+                    <div class="section-header">
+                        <i class="fas fa-smoking-ban"></i>
+                        <div>
+                            <h2 class="section-title">Seção de Fumantes</h2>
+                            <p class="section-subtitle">Informações, estatísticas e recursos sobre tabagismo</p>
+                        </div>
+                    </div>
+
+                    <h3>Estatísticas Globais do Tabagismo</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value">1.3B</div>
+                            <div class="stat-description">Fumantes no mundo</div>
+                        </div>
+                        <div class="stat-card secondary">
+                            <div class="stat-value">22M</div>
+                            <div class="stat-description">Fumantes no Brasil</div>
+                        </div>
+                        <div class="stat-card tertiary">
+                            <div class="stat-value">8M</div>
+                            <div class="stat-description">Mortes anuais por tabaco</div>
+                        </div>
+                    </div>
+
+                    <h3>Benefícios de Parar de Fumar</h3>
+                    <div class="form-grid">
+                        <div class="form-section">
+                            <h4>20 minutos</h4>
+                            <p>Frequência cardíaca e pressão arterial diminuem</p>
+                        </div>
+                        <div class="form-section">
+                            <h4>12 horas</h4>
+                            <p>Nível de monóxido de carbono normaliza</p>
+                        </div>
+                        <div class="form-section">
+                            <h4>2-12 semanas</h4>
+                            <p>Circulação melhora e função pulmonar aumenta</p>
+                        </div>
+                        <div class="form-section">
+                            <h4>1-9 meses</h4>
+                            <p>Tosse e falta de ar diminuem</p>
+                        </div>
+                        <div class="form-section">
+                            <h4>1 ano</h4>
+                            <p>Risco de doença cardíaca reduz pela metade</p>
+                        </div>
+                        <div class="form-section">
+                            <h4>5 anos</h4>
+                            <p>Risco de AVC reduz ao de um não fumante</p>
+                        </div>
+                    </div>
+
+                    <button class="btn-save" onclick="saveSmokingData()">Salvar Informações</button>
+                </section>
+
+                <!-- Comunidade -->
+                <section id="communitySection" class="content-section">
+                    <div class="section-header">
+                        <i class="fas fa-comments"></i>
+                        <div>
+                            <h2 class="section-title">Comunidade</h2>
+                            <p class="section-subtitle">Conecte-se com outros membros da comunidade Positivamente</p>
+                        </div>
+                    </div>
+
+                    <div class="community-stats">
+                        <div class="stat-card">
+                            <div class="stat-value">15.247</div>
+                            <div class="stat-description">Membros Ativos</div>
+                        </div>
+                        <div class="stat-card secondary">
+                            <div class="stat-value">428</div>
+                            <div class="stat-description">Conquistas Hoje</div>
+                        </div>
+                        <div class="stat-card tertiary">
+                            <div class="stat-value">3.7M</div>
+                            <div class="stat-description">Dias Salvos</div>
+                        </div>
+                    </div>
+
+                    <h3>Ações da Comunidade</h3>
+                    <div class="community-actions">
+                        <div class="action-card" onclick="showMembers()">
+                            <i class="fas fa-users"></i>
+                            <h4>Ver Membros</h4>
+                        </div>
+                        <div class="action-card secondary">
+                            <i class="fas fa-comments"></i>
+                            <h4>Grupos</h4>
+                        </div>
+                        <div class="action-card tertiary">
+                            <i class="fas fa-calendar"></i>
+                            <h4>Eventos</h4>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Sidebar Direita -->
+            <aside class="right-sidebar">
+                <div class="widget">
+                    <h3 class="widget-title">Usuários Sugeridos</h3>
+                    <div class="suggested-users" id="suggestedUsers">
+                        <!-- Usuários sugeridos serão inseridos aqui -->
+                    </div>
+                </div>
+
+                <div class="widget achievement">
+                    <i class="fas fa-trophy"></i>
+                    <div class="achievement-title">Sistema de Indicações!</div>
+                    <div class="achievement-desc">Ganhe R$ 10,00 por cada indicação</div>
+                </div>
+            </aside>
+        </main>
+    </div>
+
+    <!-- Modal Membros -->
+    <div id="membersModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Membros Ativos da Comunidade</h2>
+                <span class="close" onclick="closeModal('membersModal')">&times;</span>
+            </div>
+            <div class="member-list" id="memberList">
+                <!-- Lista de membros será inserida aqui -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
+
+    <footer class="legal-footer">
+        <div class="legal-footer-inner">
+            <small>&copy; 2026 Positivamente. Todos os direitos reservados.</small>
+            <nav class="legal-links" aria-label="Links legais">
+                <a href="/termos">Termos</a>
+                <a href="/privacidade">Privacidade</a>
+                <a href="/exclusao">Exclusão de Dados</a>
+            </nav>
+        </div>
+    </footer>
+
+    <script>
+        // Variáveis globais
+        let currentUser = null;
+        let posts = JSON.parse(localStorage.getItem('posts') || '[]');
+        let familyMembers = JSON.parse(localStorage.getItem('familyMembers') || '[]');
+        let users = JSON.parse(localStorage.getItem('users') || '[]');
+
+        // Dados dos membros da comunidade (baseados em histórias reais)
+        const members = [
+            {
+                name: "Ana Silva",
+                city: "São Paulo",
+                timeSmokeFree: "8 meses sem fumar",
+                quote: "Nunca pensei que conseguiria, mas com apoio desta comunidade, cada dia fica mais fácil",
+                avatar: "AS"
+            },
+            {
+                name: "Carlos Santos",
+                city: "Rio de Janeiro", 
+                timeSmokeFree: "1 ano sem fumar",
+                quote: "Para quem está começando: vocês conseguem! Eu fumava 2 maços por dia",
+                avatar: "CS"
+            },
+            {
+                name: "Maria Oliveira",
+                city: "Belo Horizonte",
+                timeSmokeFree: "6 meses sem fumar",
+                quote: "Economizei mais de R$ 2.000 desde que parei. Valeu cada esforço!",
+                avatar: "MO"
+            },
+            {
+                name: "João Pereira",
+                city: "Salvador",
+                timeSmokeFree: "2 anos sem fumar",
+                quote: "Minha filha foi minha maior motivação. Hoje respiro melhor e vivo mais",
+                avatar: "JP"
+            },
+            {
+                name: "Lucia Costa",
+                city: "Fortaleza",
+                timeSmokeFree: "3 anos sem fumar",
+                quote: "Depois de 20 anos fumando, achei que seria impossível. Mas consegui!",
+                avatar: "LC"
+            },
+            {
+                name: "Roberto Lima",
+                city: "Brasília",
+                timeSmokeFree: "4 meses sem fumar",
+                quote: "Cada dia é uma vitória. Não desistam, pessoal!",
+                avatar: "RL"
+            },
+            {
+                name: "Patricia Souza",
+                city: "Curitiba",
+                timeSmokeFree: "1 ano e 6 meses sem fumar",
+                quote: "A ansiedade diminuiu muito depois que parei. Me sinto renovada",
+                avatar: "PS"
+            },
+            {
+                name: "Fernando Alves",
+                city: "Porto Alegre",
+                timeSmokeFree: "9 meses sem fumar",
+                quote: "O dinheiro que economizei já deu para uma viagem em família",
+                avatar: "FA"
+            },
+            {
+                name: "Juliana Rocha",
+                city: "Recife",
+                timeSmokeFree: "5 meses sem fumar",
+                quote: "Meu paladar voltou! Agora sinto o sabor real da comida",
+                avatar: "JR"
+            },
+            {
+                name: "Marcos Barbosa",
+                city: "Goiânia",
+                timeSmokeFree: "2 anos e 3 meses sem fumar",
+                quote: "Correr 5km era impossível antes. Hoje faço maratonas!",
+                avatar: "MB"
+            },
+            {
+                name: "Camila Ferreira",
+                city: "Manaus",
+                timeSmokeFree: "7 meses sem fumar",
+                quote: "Minha pele melhorou muito. As pessoas notam a diferença",
+                avatar: "CF"
+            },
+            {
+                name: "Diego Ferreira",
+                city: "Florianópolis",
+                timeSmokeFree: "3 meses sem fumar",
+                quote: "Ainda no início, mas determinado",
+                avatar: "DF"
+            }
+        ];
+
+        // Inicialização - SEMPRE MOSTRAR LOGIN PRIMEIRO
+        document.addEventListener('DOMContentLoaded', function() {
+            // SEMPRE mostrar tela de login primeiro
+            document.getElementById('loginContainer').style.display = 'flex';
+            document.getElementById('appContainer').style.display = 'none';
+        });
+
+        // Funções de autenticação
+        function switchTab(tab) {
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            const tabButtons = document.querySelectorAll('.tab-button');
+
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            
+            if (tab === 'login') {
+                loginForm.classList.remove('hidden');
+                registerForm.classList.add('hidden');
+                tabButtons[0].classList.add('active');
+            } else {
+                loginForm.classList.add('hidden');
+                registerForm.classList.remove('hidden');
+                tabButtons[1].classList.add('active');
+            }
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            // Verificar se usuário existe
+            const user = users.find(u => u.email === email && u.password === password);
+
+            if (user) {
+                currentUser = user;
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                showApp();
+                showToast('Login realizado com sucesso!');
+            } else {
+                showToast('Email ou senha incorretos!', 'error');
+            }
+        }
+
+        function handleRegister(event) {
+            event.preventDefault();
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const referralCode = document.getElementById('referralCode').value;
+
+            if (password !== confirmPassword) {
+                showToast('As senhas não coincidem!', 'error');
+                return;
+            }
+
+            // Verificar se email já existe
+            if (users.find(u => u.email === email)) {
+                showToast('Este email já está cadastrado!', 'error');
+                return;
+            }
+
+            // Gerar código de indicação único
+            const myReferralCode = 'POS' + Math.random().toString(36).substr(2, 6).toUpperCase();
+
+            // Criar novo usuário
+            const newUser = {
+                id: Date.now(),
+                name,
+                email,
+                password,
+                joinDate: new Date().toISOString(),
+                daysFree: 0,
+                moneySaved: 0,
+                referralCode: myReferralCode,
+                referredBy: referralCode,
+                referralEarnings: 0,
+                totalReferrals: 0
+            };
+
+            // Processar indicação se houver código
+            if (referralCode) {
+                const referrer = users.find(u => u.referralCode === referralCode);
+                if (referrer) {
+                    referrer.totalReferrals++;
+                    referrer.referralEarnings += 10;
+                    
+                    // Atualizar usuário no array
+                    const referrerIndex = users.findIndex(u => u.id === referrer.id);
+                    users[referrerIndex] = referrer;
+                    
+                    // Criar atividade de indicação
+                    createActivityPost(`${referrer.name} indicou ${name} para a comunidade! 🎉 Ganhou R$ 10,00 de bonificação.`);
+                    
+                    showToast(`Você foi indicado por ${referrer.name}! Bem-vindo!`);
+                } else {
+                    showToast('Código de indicação inválido, mas conta criada com sucesso!');
+                }
+            }
+
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            currentUser = newUser;
+            localStorage.setItem('currentUser', JSON.stringify(newUser));
+            
+            showApp();
+            showToast('Conta criada com sucesso!');
+        }
+
+        function showApp() {
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('appContainer').style.display = 'block';
+            
+            // Atualizar interface com dados do usuário
+            updateUserInterface();
+            loadPosts();
+            loadSuggestedUsers();
+            loadFamilyTree();
+            updateReferralInfo();
+            updatePersonalStats();
+        }
+
+        function updateUserInterface() {
+            if (!currentUser) return;
+
+            const initials = currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase();
+            
+            document.getElementById('userAvatar').textContent = initials;
+            document.getElementById('profileAvatar').textContent = initials;
+            document.getElementById('composerAvatar').textContent = initials;
+            document.getElementById('profileName').textContent = currentUser.name;
+            document.getElementById('daysFree').textContent = currentUser.daysFree || 0;
+            document.getElementById('moneySaved').textContent = `R$ ${(currentUser.moneySaved || 0).toFixed(2)}`;
+            
+            // Atualizar campos do perfil
+            if (document.getElementById('myReferralCode')) {
+                document.getElementById('myReferralCode').value = currentUser.referralCode;
+                document.getElementById('referralBalance').value = `R$ ${(currentUser.referralEarnings || 0).toFixed(2)}`;
+                document.getElementById('totalReferrals').value = currentUser.totalReferrals || 0;
+                
+                // Atualizar sistema de indicações
+                document.getElementById('displayReferralCode').value = currentUser.referralCode;
+            }
+        }
+
+        // Funções de navegação
+        function showSection(sectionName) {
+            // Remover classe active de todas as seções
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remover classe active de todos os links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+
+            // Mostrar seção selecionada
+            document.getElementById(sectionName + 'Section').classList.add('active');
+            
+            // Adicionar classe active ao link clicado
+            event.target.classList.add('active');
+        }
+
+        // Funções do feed
+        function createPost() {
+            const content = document.getElementById('postContent').value.trim();
+            if (!content) {
+                showToast('Digite algo para publicar!', 'error');
+                return;
+            }
+
+            const newPost = {
+                id: Date.now(),
+                author: currentUser.name,
+                avatar: currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase(),
+                content: content,
+                timestamp: new Date(),
+                likes: 0,
+                comments: 0,
+                shares: 0,
+                liked: false,
+                type: 'user'
+            };
+
+            posts.unshift(newPost);
+            localStorage.setItem('posts', JSON.stringify(posts));
+            
+            document.getElementById('postContent').value = '';
+            loadPosts();
+            showToast('Publicação criada com sucesso!');
+        }
+
+        function createActivityPost(content) {
+            const activityPost = {
+                id: Date.now(),
+                author: 'Sistema',
+                avatar: 'SYS',
+                content: content,
+                timestamp: new Date(),
+                likes: 0,
+                comments: 0,
+                shares: 0,
+                liked: false,
+                type: 'activity'
+            };
+
+            posts.unshift(activityPost);
+            localStorage.setItem('posts', JSON.stringify(posts));
+            loadPosts();
+        }
+
+        function loadPosts() {
+            const container = document.getElementById('postsContainer');
+            
+            if (posts.length === 0) {
+                container.innerHTML = `
+                    <div class="post">
+                        <div class="post-header">
+                            <div class="post-avatar">SYS</div>
+                            <div class="post-info">
+                                <div class="post-author">Sistema Positivamente</div>
+                                <div class="post-time">Agora</div>
+                            </div>
+                        </div>
+                        <div class="post-content">
+                            Bem-vindo à comunidade Positivamente! 🎉 Compartilhe suas conquistas, experiências e inspire outros membros em sua jornada de libertação do tabagismo.
+                        </div>
+                        <div class="post-actions">
+                            <button class="action-btn" onclick="likePost(0)">
+                                <i class="fas fa-heart"></i>
+                                <span class="count">0</span>
+                            </button>
+                            <button class="action-btn">
+                                <i class="fas fa-comment"></i>
+                                <span class="count">0</span>
+                            </button>
+                            <button class="action-btn">
+                                <i class="fas fa-share"></i>
+                                <span class="count">0</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = posts.map((post, index) => `
+                <div class="post">
+                    <div class="post-header">
+                        <div class="post-avatar">${post.avatar}</div>
+                        <div class="post-info">
+                            <div class="post-author">${post.author}</div>
+                            <div class="post-time">${formatTime(post.timestamp)}</div>
+                        </div>
+                    </div>
+                    <div class="post-content">${post.content}</div>
+                    <div class="post-actions">
+                        <button class="action-btn ${post.liked ? 'liked' : ''}" onclick="likePost(${index})">
+                            <i class="fas fa-heart"></i>
+                            <span class="count">${post.likes}</span>
+                        </button>
+                        <button class="action-btn" onclick="commentPost(${index})">
+                            <i class="fas fa-comment"></i>
+                            <span class="count">${post.comments}</span>
+                        </button>
+                        <button class="action-btn" onclick="sharePost(${index})">
+                            <i class="fas fa-share"></i>
+                            <span class="count">${post.shares}</span>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function likePost(index) {
+            if (posts[index].liked) {
+                posts[index].likes--;
+                posts[index].liked = false;
+            } else {
+                posts[index].likes++;
+                posts[index].liked = true;
+            }
+            
+            localStorage.setItem('posts', JSON.stringify(posts));
+            loadPosts();
+        }
+
+        function commentPost(index) {
+            posts[index].comments++;
+            localStorage.setItem('posts', JSON.stringify(posts));
+            loadPosts();
+            showToast('Comentário adicionado!');
+        }
+
+        function sharePost(index) {
+            posts[index].shares++;
+            localStorage.setItem('posts', JSON.stringify(posts));
+            loadPosts();
+            showToast('Post compartilhado!');
+        }
+
+        function formatTime(timestamp) {
+            const now = new Date();
+            const postTime = new Date(timestamp);
+            const diffInMinutes = Math.floor((now - postTime) / (1000 * 60));
+            
+            if (diffInMinutes < 1) return 'Agora';
+            if (diffInMinutes < 60) return `${diffInMinutes} min`;
+            if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)} h`;
+            return `${Math.floor(diffInMinutes / 1440)} dias`;
+        }
+
+        // Funções da árvore genealógica
+        function addFamilyMember() {
+            const name = document.getElementById('familyName').value.trim();
+            const relation = document.getElementById('familyRelation').value;
+            const email = document.getElementById('familyEmail').value.trim();
+
+            if (!name || !relation) {
+                showToast('Preencha nome e parentesco!', 'error');
+                return;
+            }
+
+            const familyMember = {
+                id: Date.now(),
+                name,
+                relation,
+                email,
+                addedBy: currentUser.name,
+                addedAt: new Date().toISOString()
+            };
+
+            familyMembers.push(familyMember);
+            localStorage.setItem('familyMembers', JSON.stringify(familyMembers));
+
+            // Criar post de atividade
+            createActivityPost(`${currentUser.name} adicionou ${name} (${relation}) à sua árvore genealógica! 👨‍👩‍👧‍👦`);
+
+            // Limpar formulário
+            document.getElementById('familyName').value = '';
+            document.getElementById('familyRelation').value = '';
+            document.getElementById('familyEmail').value = '';
+
+            loadFamilyTree();
+            showToast('Familiar adicionado à árvore genealógica!');
+        }
+
+        function loadFamilyTree() {
+            const container = document.getElementById('familyTree');
+            
+            if (familyMembers.length === 0) {
+                container.innerHTML = '<p>Nenhum familiar adicionado ainda. Comece construindo sua árvore genealógica!</p>';
+                return;
+            }
+
+            container.innerHTML = familyMembers.map(member => `
+                <div class="member-item">
+                    <div class="member-avatar">${member.name.split(' ').map(n => n[0]).join('').toUpperCase()}</div>
+                    <div class="member-info">
+                        <div class="member-name">${member.name}</div>
+                        <div class="member-details">${member.relation}</div>
+                        ${member.email ? `<div class="member-quote">${member.email}</div>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Funções do sistema de indicações
+        function updateReferralInfo() {
+            if (!currentUser) return;
+            
+            if (document.getElementById('referralEarnings')) {
+                document.getElementById('referralEarnings').textContent = `R$ ${(currentUser.referralEarnings || 0).toFixed(2)}`;
+                document.getElementById('referralCount').textContent = currentUser.totalReferrals || 0;
+                document.getElementById('pendingReferrals').textContent = '0'; // Placeholder
+            }
+        }
+
+        function copyReferralCode() {
+            const code = document.getElementById('displayReferralCode').value;
+            navigator.clipboard.writeText(code).then(() => {
+                showToast('Código copiado para a área de transferência!');
+            });
+        }
+
+        function shareReferralCode() {
+            const code = currentUser.referralCode;
+            const message = `Junte-se a mim no Positivamente e transforme sua vida! Use meu código ${code} e ganhe benefícios especiais. https://positivamente.app`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Positivamente - Libertação do Tabagismo',
+                    text: message
+                });
+            } else {
+                navigator.clipboard.writeText(message).then(() => {
+                    showToast('Mensagem de convite copiada!');
+                });
+            }
+        }
+
+        // Funções da anamnese
+        function saveAnamnese() {
+            const anamneseData = {
+                age: document.getElementById('anamneseAge').value,
+                sex: document.getElementById('anamneseSex').value,
+                weight: document.getElementById('anamneseWeight').value,
+                height: document.getElementById('anamneseHeight').value,
+                smokingTime: document.getElementById('smokingTime').value,
+                cigarettesPerDay: document.getElementById('cigarettesPerDay').value,
+                quitAttempts: document.getElementById('quitAttempts').value,
+                heartProblems: document.getElementById('heartProblems').value,
+                medications: document.getElementById('medications').value,
+                allergies: document.getElementById('allergies').value,
+                familySmokers: document.getElementById('familySmokers').value,
+                otherDrugs: document.getElementById('otherDrugs').value,
+                socialSupport: document.getElementById('socialSupport').value
+            };
+
+            // Validar campos obrigatórios
+            if (!anamneseData.age || !anamneseData.sex || !anamneseData.weight || !anamneseData.height) {
+                showToast('Preencha todos os campos obrigatórios!', 'error');
+                return;
+            }
+
+            // Calcular IMC automaticamente
+            const weight = parseFloat(anamneseData.weight);
+            const height = parseFloat(anamneseData.height) / 100; // converter cm para m
+            const imc = weight / (height * height);
+
+            anamneseData.imc = imc.toFixed(1);
+            anamneseData.completedAt = new Date().toISOString();
+
+            // Salvar anamnese
+            currentUser.anamnese = anamneseData;
+            
+            // Atualizar usuários no localStorage
+            const userIndex = users.findIndex(u => u.id === currentUser.id);
+            if (userIndex !== -1) {
+                users[userIndex] = currentUser;
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+            // Gerar recomendações personalizadas
+            generateRecommendations(anamneseData);
+
+            showToast('Anamnese salva com sucesso!');
+        }
+
+        function generateRecommendations(anamneseData) {
+            const recommendations = {
+                alimentacao: [],
+                exercicios: [],
+                suplementos: [],
+                week: getCurrentWeek()
+            };
+
+            // Recomendações baseadas no IMC
+            const imc = parseFloat(anamneseData.imc);
+            if (imc < 18.5) {
+                recommendations.alimentacao.push('Aumente a ingestão calórica com alimentos nutritivos');
+                recommendations.exercicios.push('Exercícios de fortalecimento muscular');
+            } else if (imc > 25) {
+                recommendations.alimentacao.push('Dieta rica em fibras e baixa em gorduras');
+                recommendations.exercicios.push('Exercícios aeróbicos 30min/dia');
+            } else {
+                recommendations.alimentacao.push('Mantenha uma dieta equilibrada');
+                recommendations.exercicios.push('Exercícios regulares 3x por semana');
+            }
+
+            // Recomendações para ex-fumantes
+            recommendations.suplementos.push('Vitamina C para recuperação pulmonar');
+            recommendations.suplementos.push('Ômega 3 para saúde cardiovascular');
+            
+            if (anamneseData.heartProblems === 'sim') {
+                recommendations.exercicios.push('Consulte cardiologista antes de exercícios intensos');
+                recommendations.suplementos.push('Coenzima Q10 (com orientação médica)');
+            }
+
+            // Salvar recomendações
+            currentUser.recommendations = recommendations;
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+            // Exibir recomendações
+            displayRecommendations(recommendations);
+        }
+
+        function displayRecommendations(recommendations) {
+            const container = document.getElementById('weeklyRecommendations');
+            container.innerHTML = `
+                <div class="form-grid">
+                    <div class="form-section">
+                        <h4>🥗 Alimentação (Semana ${recommendations.week})</h4>
+                        ${recommendations.alimentacao.map(item => `<p>• ${item}</p>`).join('')}
+                    </div>
+                    <div class="form-section">
+                        <h4>🏃‍♂️ Exercícios (Semana ${recommendations.week})</h4>
+                        ${recommendations.exercicios.map(item => `<p>• ${item}</p>`).join('')}
+                    </div>
+                    <div class="form-section">
+                        <h4>💊 Suplementos (Semana ${recommendations.week})</h4>
+                        ${recommendations.suplementos.map(item => `<p>• ${item}</p>`).join('')}
+                    </div>
+                </div>
+                <p><small>Próxima atualização: ${getNextUpdateDate()}</small></p>
+            `;
+            
+            document.getElementById('anamneseResults').style.display = 'block';
+        }
+
+        function getCurrentWeek() {
+            const now = new Date();
+            const start = new Date(now.getFullYear(), 0, 1);
+            return Math.ceil(((now - start) / 86400000 + start.getDay() + 1) / 7);
+        }
+
+        function getNextUpdateDate() {
+            const now = new Date();
+            const nextWeek = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+            return nextWeek.toLocaleDateString('pt-BR');
+        }
+
+        // Funções da calculadora IMC
+        function calculateIMC() {
+            const weight = parseFloat(document.getElementById('imcWeight').value);
+            const height = parseFloat(document.getElementById('imcHeight').value);
+
+            if (!weight || !height) {
+                showToast('Preencha peso e altura!', 'error');
+                return;
+            }
+
+            const heightInMeters = height / 100;
+            const imc = weight / (heightInMeters * heightInMeters);
+            
+            let classification = '';
+            let color = '';
+            
+            if (imc < 18.5) {
+                classification = 'Abaixo do peso';
+                color = '#2196F3';
+            } else if (imc < 25) {
+                classification = 'Peso normal';
+                color = '#4CAF50';
+            } else if (imc < 30) {
+                classification = 'Sobrepeso';
+                color = '#FF9800';
+            } else if (imc < 35) {
+                classification = 'Obesidade grau I';
+                color = '#FF5722';
+            } else if (imc < 40) {
+                classification = 'Obesidade grau II';
+                color = '#F44336';
+            } else {
+                classification = 'Obesidade grau III';
+                color = '#9C27B0';
+            }
+
+            const resultContainer = document.getElementById('imcResult');
+            resultContainer.innerHTML = `
+                <div class="imc-result" style="border-color: ${color}; background: ${color}15;">
+                    <div class="imc-value" style="color: ${color};">${imc.toFixed(1)}</div>
+                    <div class="imc-classification">${classification}</div>
+                    <p>Peso: ${weight}kg | Altura: ${height}cm</p>
+                </div>
+            `;
+            resultContainer.style.display = 'block';
+
+            // Atualizar dados do usuário
+            if (currentUser) {
+                currentUser.imc = imc.toFixed(1);
+                currentUser.imcClassification = classification;
+                
+                // Atualizar usuários no localStorage
+                const userIndex = users.findIndex(u => u.id === currentUser.id);
+                if (userIndex !== -1) {
+                    users[userIndex] = currentUser;
+                    localStorage.setItem('users', JSON.stringify(users));
+                }
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            }
+
+            showToast('IMC calculado com sucesso!');
+        }
+
+        // Funções da seção de fumantes
+        function saveSmokingData() {
+            showToast('Informações sobre tabagismo salvas!');
+        }
+
+        // Atualizar estatísticas pessoais
+        function updatePersonalStats() {
+            if (!currentUser) return;
+
+            // Calcular dias livres (exemplo)
+            const joinDate = new Date(currentUser.joinDate);
+            const now = new Date();
+            const daysFree = Math.floor((now - joinDate) / (1000 * 60 * 60 * 24));
+            
+            // Calcular dinheiro economizado (R$ 15 por maço por dia)
+            const moneySaved = daysFree * 15;
+            
+            // Calcular cigarros não fumados
+            const cigarettesNotSmoked = daysFree * 20;
+
+            // Atualizar interface
+            if (document.getElementById('personalDaysFree')) {
+                document.getElementById('personalDaysFree').value = daysFree;
+                document.getElementById('personalMoneySaved').value = `R$ ${moneySaved.toFixed(2)}`;
+                document.getElementById('cigarettesNotSmoked').value = cigarettesNotSmoked;
+            }
+
+            // Atualizar dados do usuário
+            currentUser.daysFree = daysFree;
+            currentUser.moneySaved = moneySaved;
+            
+            // Atualizar usuários no localStorage
+            const userIndex = users.findIndex(u => u.id === currentUser.id);
+            if (userIndex !== -1) {
+                users[userIndex] = currentUser;
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+            updateUserInterface();
+        }
+
+        // Funções da comunidade
+        function showMembers() {
+            const modal = document.getElementById('membersModal');
+            const memberList = document.getElementById('memberList');
+            
+            memberList.innerHTML = members.map(member => `
+                <div class="member-item">
+                    <div class="member-avatar">${member.avatar}</div>
+                    <div class="member-info">
+                        <div class="member-name">${member.name}</div>
+                        <div class="member-details">${member.city} • ${member.timeSmokeFree}</div>
+                        <div class="member-quote">"${member.quote}"</div>
+                    </div>
+                    <button class="follow-btn" onclick="followMember('${member.name}')">Seguir</button>
+                </div>
+            `).join('');
+            
+            modal.style.display = 'block';
+        }
+
+        function followMember(memberName) {
+            showToast(`Você começou a seguir ${memberName}!`);
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Funções do perfil
+        function saveProfile() {
+            const profileData = {
+                fullName: document.getElementById('profileFullName').value,
+                email: document.getElementById('profileEmail').value,
+                phone: document.getElementById('profilePhone').value,
+                birthdate: document.getElementById('profileBirthdate').value,
+                city: document.getElementById('profileCity').value
+            };
+
+            currentUser.profile = profileData;
+            
+            // Atualizar usuários no localStorage
+            const userIndex = users.findIndex(u => u.id === currentUser.id);
+            if (userIndex !== -1) {
+                users[userIndex] = currentUser;
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            showToast('Perfil salvo com sucesso!');
+        }
+
+        // Funções dos usuários sugeridos
+        function loadSuggestedUsers() {
+            const suggestedContainer = document.getElementById('suggestedUsers');
+            const suggestedMembers = members.slice(0, 5);
+            
+            suggestedContainer.innerHTML = suggestedMembers.map(member => `
+                <div class="suggested-user">
+                    <div class="suggested-avatar">${member.avatar}</div>
+                    <div class="suggested-info">
+                        <div class="suggested-name">${member.name}</div>
+                        <div class="suggested-status">${member.timeSmokeFree}</div>
+                    </div>
+                    <button class="suggested-follow" onclick="followMember('${member.name}')">Seguir</button>
+                </div>
+            `).join('');
+        }
+
+        // Função de toast
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type}`;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Fechar modal ao clicar fora
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
