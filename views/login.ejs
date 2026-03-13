@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Positivamente</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/index.css">
+</head>
+<body>
+  <div id="loginContainer" class="login-container">
+    <div class="login-left">
+      <h1>Positivamente</h1>
+      <p>Sua jornada de libertação do tabagismo começa aqui. Junte-se a milhares de pessoas que já transformaram suas vidas.</p>
+      
+      <div class="features">
+        <div class="feature">
+          <i class="fas fa-users"></i>
+          <h4>Comunidade</h4>
+          <p>Conecte-se com outros</p>
+        </div>
+        <div class="feature">
+          <i class="fas fa-chart-line"></i>
+          <h4>Progresso</h4>
+          <p>Acompanhe sua evolução</p>
+        </div>
+        <div class="feature">
+          <i class="fas fa-heart"></i>
+          <h4>Saúde</h4>
+          <p>Monitore benefícios</p>
+        </div>
+        <div class="feature">
+          <i class="fas fa-gift"></i>
+          <h4>Recompensas</h4>
+          <p>Ganhe por indicações</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="login-right">
+      <div class="login-form">
+        <div class="form-tabs">
+          <button class="tab-button active" onclick="switchTab('login')">Entrar</button>
+          <button class="tab-button" onclick="switchTab('register')">Cadastrar</button>
+        </div>
+        
+        <% if (error) { %>
+          <div class="alert alert-error"><%= error %></div>
+        <% } %>
+        
+        <form id="loginForm" action="/login" method="POST">
+          <div class="form-group">
+            <label for="loginEmail">Email</label>
+            <input type="email" id="loginEmail" name="email" required>
+          </div>
+          <div class="form-group">
+            <label for="loginPassword">Senha</label>
+            <input type="password" id="loginPassword" name="password" required>
+          </div>
+          <button type="submit" class="btn-primary">Entrar</button>
+        </form>
+        
+        <form id="registerForm" class="hidden" action="/register" method="POST">
+          <div class="form-group">
+            <label for="registerName">Nome Completo</label>
+            <input type="text" id="registerName" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="registerEmail">Email</label>
+            <input type="email" id="registerEmail" name="email" required>
+          </div>
+          <div class="form-group">
+            <label for="registerPassword">Senha</label>
+            <input type="password" id="registerPassword" name="password" required minlength="6">
+          </div>
+          <div class="form-group">
+            <label for="confirmPassword">Confirmar Senha</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required>
+          </div>
+          <div class="form-group">
+            <label for="referralCode">Código de Indicação (opcional)</label>
+            <input type="text" id="referralCode" name="referralCode" placeholder="Ex: POS123ABC">
+          </div>
+          <button type="submit" class="btn-primary">Criar Conta</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <footer class="legal-footer">
+    <div class="legal-footer-inner">
+      <small>&copy; 2026 Positivamente. Todos os direitos reservados.</small>
+      <nav class="legal-links" aria-label="Links legais">
+        <a href="/termos">Termos</a>
+        <a href="/privacidade">Privacidade</a>
+        <a href="/exclusao">Exclusão de Dados</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    function switchTab(tab) {
+      const loginForm = document.getElementById('loginForm');
+      const registerForm = document.getElementById('registerForm');
+      const tabButtons = document.querySelectorAll('.tab-button');
+
+      tabButtons.forEach(btn => btn.classList.remove('active'));
+      
+      if (tab === 'login') {
+        loginForm.classList.remove('hidden');
+        registerForm.classList.add('hidden');
+        tabButtons[0].classList.add('active');
+      } else {
+        loginForm.classList.add('hidden');
+        registerForm.classList.remove('hidden');
+        tabButtons[1].classList.add('active');
+      }
+    }
+
+    document.querySelector('#registerForm').addEventListener('submit', function(e) {
+      const password = document.getElementById('registerPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      
+      if (password !== confirmPassword) {
+        e.preventDefault();
+        alert('As senhas não coincidem!');
+      }
+    });
+  </script>
+</body>
+</html>

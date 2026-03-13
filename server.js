@@ -1,11 +1,35 @@
 require("dotenv").config();
 
 const express = require("express");
+const session = require("express-session");
 const axios = require("axios");
 const path = require("path");
 
+const authRoutes = require("./routes/auth");
+const appRoutes = require("./routes/app");
+const userModel = require("./models/user");
+const postModel = require("./models/post");
+const familyModel = require("./models/family");
+const anamneseModel = require("./models/anamnese");
+const webhookModel = require("./models/webhook");
+
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use(session({
+  secret: process.env.SESSION_SECRET || "positivamente-secret-key-change-in-production",
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 24 * 60 * 60 * 1000,
+  },
+}));
+
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+
 app.use("/css", express.static(path.join(__dirname, "public", "css")));
 
 const PORT = process.env.PORT || 3000;
@@ -13,27 +37,58 @@ const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
 const META_ACCESS_TOKEN = process.env.META_ACCESS_TOKEN;
 const GRAPH_API_VERSION = process.env.GRAPH_API_VERSION || "v23.0";
 
-function sendHtmlPage(pageFile) {
-  return (_req, res) => {
-    res.sendFile(path.join(__dirname, pageFile));
-  };
+function requireAuth(req, res, next) {
+  if (!req.session.user) {
+    return res.redirect("/login");
+  }
+  next();
 }
 
-app.get("/", sendHtmlPage("index.html"));
-app.get("/privacidade", sendHtmlPage("privacidade.html"));
-app.get("/termos", sendHtmlPage("termos.html"));
-app.get("/exclusao", sendHtmlPage("exclusao.html"));
+app.use("/", authRoutes);
+app.use("/", appRoutes);
 
-// Compatibilidade com links antigos
+app.get("/", requireAuth, (req, res) => {
+  res.redirect("/feed");
+});
+
+app.get("/feed", requireAuth, async (req, res) => {
+  try {
+    const user = await userModel.findUserById(req.session.user.id);
+    const posts = await postModel.getPosts(20);
+    const familyMembers = await familyModel.getFamilyMembers(req.session.user.id);
+    const anamnese = await anamneseModel.getAnamneseByUser(req.session.user.id);
+
+    res.render("index", {
+      currentUser: req.session.user,
+      user,
+      posts,
+      familyMembers,
+      anamnese,
+      title: "Positivamente",
+    });
+  } catch (err) {
+    console.error("Error loading feed:", err);
+    res.status(500).send("Erro ao carregar feed: " + err.message);
+  }
+});
+
+app.get("/privacidade", (_req, res) => {
+  res.render("privacidade", { title: "Política de Privacidade" });
+});
+
+app.get("/termos", (_req, res) => {
+  res.render("termos", { title: "Termos de Serviço" });
+});
+
+app.get("/exclusao", (_req, res) => {
+  res.render("exclusao", { title: "Exclusão de Dados" });
+});
+
 app.get("/index.html", (_req, res) => res.redirect(301, "/"));
 app.get("/privacidade.html", (_req, res) => res.redirect(301, "/privacidade"));
 app.get("/termos.html", (_req, res) => res.redirect(301, "/termos"));
 app.get("/exclusao.html", (_req, res) => res.redirect(301, "/exclusao"));
 
-/**
- * Função simples para decidir a resposta automática.
- * Em produção, vale usar regras melhores, banco de dados e logs.
- */
 function buildAutoReply(commentText) {
   if (!commentText) {
     return null;
@@ -53,31 +108,9 @@ function buildAutoReply(commentText) {
     return "Olá! Obrigado pelo comentário. Como posso te ajudar?";
   }
 
-  // Resposta padrão
   return "Obrigado pelo seu comentário! Já já retorno com mais detalhes.";
 }
 
-/**
- * Evita responder seu próprio comentário ou duplicar respostas.
- * Em produção, o ideal é gravar o comment_id em banco para idempotência.
- */
-const processedComments = new Set();
-
-function hasProcessed(commentId) {
-  return processedComments.has(commentId);
-}
-
-function markProcessed(commentId) {
-  processedComments.add(commentId);
-
-  // Limpeza simples para não crescer indefinidamente em memória
-  setTimeout(() => processedComments.delete(commentId), 1000 * 60 * 60);
-}
-
-/**
- * Publica uma resposta em um comentário do Instagram.
- * Pela API da Meta, a coleção de replies do comentário permite criar resposta.
- */
 async function replyToInstagramComment(commentId, message) {
   const url = `https://graph.facebook.com/${GRAPH_API_VERSION}/${commentId}/replies`;
 
@@ -95,10 +128,6 @@ async function replyToInstagramComment(commentId, message) {
   return response.data;
 }
 
-/**
- * Busca mais dados do comentário, se necessário.
- * Dependendo do payload recebido no webhook, você pode precisar consultar o comentário.
- */
 async function getInstagramComment(commentId) {
   const fields = [
     "id",
@@ -121,9 +150,6 @@ async function getInstagramComment(commentId) {
   return response.data;
 }
 
-/**
- * Endpoint de verificação do webhook da Meta
- */
 app.get("/webhook", (req, res) => {
   const mode = req.query["hub.mode"];
   const token = req.query["hub.verify_token"];
@@ -137,46 +163,40 @@ app.get("/webhook", (req, res) => {
   return res.sendStatus(403);
 });
 
-/**
- * Endpoint que recebe eventos do Instagram
- */
 app.post("/webhook", async (req, res) => {
   try {
     const body = req.body;
 
-    // Sempre responda 200 rapidamente para a Meta
     res.sendStatus(200);
+
+    await webhookModel.cleanupOldProcessed();
 
     if (!body || body.object !== "instagram") {
       console.log("Evento ignorado: objeto não é instagram.");
       return;
     }
 
-    // Estrutura pode variar conforme o tipo de evento recebido
     for (const entry of body.entry || []) {
       for (const change of entry.changes || []) {
         const field = change.field;
         const value = change.value;
 
-        // Dependendo da assinatura do webhook, você vai filtrar aqui
-        // Exemplo prático: evento relacionado a comentário
         if (field !== "comments") {
           continue;
         }
 
-        // Alguns payloads trazem comment_id ou id
         const commentId = value.comment_id || value.id;
         if (!commentId) {
           console.log("Evento sem commentId:", JSON.stringify(value));
           continue;
         }
 
-        if (hasProcessed(commentId)) {
+        if (await webhookModel.hasProcessed(commentId)) {
           console.log(`Comentário ${commentId} já processado.`);
           continue;
         }
 
-        markProcessed(commentId);
+        await webhookModel.markProcessed(commentId);
 
         let commentData = null;
 

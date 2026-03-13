@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof title !== 'undefined' ? title : 'Positivamente' %></title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/index.css">
+</head>
+<body>
+  <%- body %>
+  
+  <footer class="legal-footer">
+    <div class="legal-footer-inner">
+      <small>&copy; 2026 Positivamente. Todos os direitos reservados.</small>
+      <nav class="legal-links" aria-label="Links legais">
+        <a href="/termos">Termos</a>
+        <a href="/privacidade">Privacidade</a>
+        <a href="/exclusao">Exclusão de Dados</a>
+      </nav>
+    </div>
+  </footer>
+</body>
+</html>

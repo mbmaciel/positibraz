@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Árvore Genealógica - Positivamente</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/index.css">
+</head>
+<body>
+  <div id="appContainer" class="app-container">
+    <header class="header">
+      <div class="logo">
+        <i class="fas fa-leaf"></i>
+        Positivamente
+      </div>
+      <div class="user-menu">
+        <a href="/" class="back-link"><i class="fas fa-arrow-left"></i> Voltar</a>
+        <div class="user-avatar"><%= currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase() %></div>
+        <a href="/logout" class="logout-link" title="Sair"><i class="fas fa-sign-out-alt"></i></a>
+      </div>
+    </header>
+
+    <main class="main-layout">
+      <div class="main-content" style="margin: 0 auto;">
+        <section class="content-section active">
+          <div class="section-header">
+            <i class="fas fa-sitemap"></i>
+            <div>
+              <h2 class="section-title">Árvore Genealógica</h2>
+              <p class="section-subtitle">Conecte-se com familiares e construa sua rede de apoio</p>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-section">
+              <h3>Adicionar Familiar</h3>
+              <form action="/family" method="POST">
+                <div class="form-group">
+                  <label for="familyName">Nome do Familiar</label>
+                  <input type="text" id="familyName" name="name" required>
+                </div>
+                <div class="form-group">
+                  <label for="familyRelation">Parentesco</label>
+                  <select id="familyRelation" name="relation" required>
+                    <option value="">Selecione...</option>
+                    <option value="pai">Pai</option>
+                    <option value="mae">Mãe</option>
+                    <option value="irmao">Irmão</option>
+                    <option value="irma">Irmã</option>
+                    <option value="filho">Filho</option>
+                    <option value="filha">Filha</option>
+                    <option value="avo">Avô</option>
+                    <option value="avo">Avó</option>
+                    <option value="tio">Tio</option>
+                    <option value="tia">Tia</option>
+                    <option value="primo">Primo</option>
+                    <option value="prima">Prima</option>
+                    <option value="conjuge">Cônjuge</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="familyEmail">Email (opcional)</label>
+                  <input type="email" id="familyEmail" name="email">
+                </div>
+                <button type="submit" class="btn-save">Adicionar à Árvore</button>
+              </form>
+            </div>
+
+            <div class="form-section">
+              <h3>Minha Árvore Familiar</h3>
+              <% if (familyMembers.length === 0) { %>
+                <p style="color: #666; font-style: italic;">Nenhum familiar adicionado ainda.</p>
+              <% } else { %>
+                <div id="familyTree">
+                  <% familyMembers.forEach(function(member) { %>
+                    <div class="family-member">
+                      <div class="family-member-avatar"><%= member.name.split(' ').map(n => n[0]).join('').toUpperCase() %></div>
+                      <div class="family-member-info">
+                        <div class="family-member-name"><%= member.name %></div>
+                        <div class="family-member-relation"><%= member.relation %></div>
+                      </div>
+                      <form action="/family/delete/<%= member.id %>" method="POST" style="display:inline;">
+                        <button type="submit" class="btn-delete" title="Remover">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </form>
+                    </div>
+                  <% }); %>
+                </div>
+              <% } %>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

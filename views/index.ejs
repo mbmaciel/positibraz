@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Positivamente - Sua Jornada de Libertação</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/index.css">
+</head>
+<body>
+  <div id="appContainer" class="app-container">
+    <header class="header">
+      <div class="logo">
+        <i class="fas fa-leaf"></i>
+        Positivamente
+      </div>
+      
+      <div class="search-bar">
+        <input type="text" placeholder="Buscar inspiração...">
+      </div>
+      
+      <div class="social-links">
+        <a href="https://facebook.com/positibraz" class="social-link facebook" title="Facebook @positibraz">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="https://instagram.com/positibraz" class="social-link instagram" title="Instagram @positibraz">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="https://tiktok.com/@positibraz" class="social-link tiktok" title="TikTok @positibraz">
+          <i class="fab fa-tiktok"></i>
+        </a>
+        <a href="https://x.com/positibraz" class="social-link twitter" title="X @positibraz">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </div>
+      
+      <div class="user-menu">
+        <div class="user-avatar"><%= currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase() %></div>
+        <a href="/logout" class="logout-link" title="Sair"><i class="fas fa-sign-out-alt"></i></a>
+      </div>
+    </header>
+
+    <main class="main-layout">
+      <aside class="left-sidebar">
+        <div class="profile-card">
+          <div class="profile-avatar"><%= currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase() %></div>
+          <div class="profile-name"><%= user.name %></div>
+          <div class="profile-status">Em jornada de libertação</div>
+          <div class="profile-stats">
+            <div class="stat">
+              <div class="stat-value"><%= user.days_free || 0 %></div>
+              <div class="stat-label">Dias livres</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value">R$ <%= Number(user.money_saved || 0).toFixed(2) %></div>
+              <div class="stat-label">Economizado</div>
+            </div>
+          </div>
+        </div>
+
+        <nav class="nav-menu">
+          <a class="nav-link active" href="/">
+            <i class="fas fa-home"></i>
+            Feed Principal
+          </a>
+          <a class="nav-link" href="/profile">
+            <i class="fas fa-user"></i>
+            Meu Perfil
+          </a>
+          <a class="nav-link" href="/family">
+            <i class="fas fa-sitemap"></i>
+            Árvore Genealógica
+            <span class="nav-badge"><%= familyMembers.length %></span>
+          </a>
+          <a class="nav-link" href="/referral">
+            <i class="fas fa-users"></i>
+            Sistema de Indicações
+            <span class="nav-badge"><%= user.total_referrals || 0 %></span>
+          </a>
+          <a class="nav-link" href="/anamnese">
+            <i class="fas fa-clipboard-list"></i>
+            Anamnese
+          </a>
+          <a class="nav-link" href="/imc">
+            <i class="fas fa-calculator"></i>
+            Calculadora IMC
+          </a>
+          <a class="nav-link" href="/smoking">
+            <i class="fas fa-smoking-ban"></i>
+            Seção de Fumantes
+          </a>
+          <a class="nav-link" href="/community">
+            <i class="fas fa-comments"></i>
+            Comunidade
+          </a>
+        </nav>
+      </aside>
+
+      <div class="main-content">
+        <section id="feedSection" class="content-section active">
+          <div class="section-header">
+            <i class="fas fa-home"></i>
+            <div>
+              <h2 class="section-title">Feed Principal</h2>
+              <p class="section-subtitle">Acompanhe as atividades da comunidade, conexões e atualizações</p>
+            </div>
+          </div>
+
+          <div class="post-composer">
+            <form action="/posts" method="POST">
+              <div class="composer-header">
+                <div class="composer-avatar"><%= currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase() %></div>
+                <div class="composer-input">
+                  <textarea name="content" id="postContent" placeholder="Compartilhe uma conquista, experiência ou inspire alguém..."></textarea>
+                </div>
+              </div>
+              <div class="composer-actions">
+                <button type="submit" class="post-btn">Publicar</button>
+              </div>
+            </form>
+          </div>
+
+          <div id="postsContainer">
+            <% if (posts.length === 0) { %>
+              <div class="post">
+                <div class="post-header">
+                  <div class="post-avatar">SYS</div>
+                  <div class="post-info">
+                    <div class="post-author">Sistema Positivamente</div>
+                    <div class="post-time">Agora</div>
+                  </div>
+                </div>
+                <div class="post-content">
+                  Bem-vindo à comunidade Positivamente! 🎉 Compartilhe suas conquistas, experiências e inspire outros membros em sua jornada de libertação do tabagismo.
+                </div>
+              </div>
+            <% } else { %>
+              <% posts.forEach(function(post) { %>
+                <div class="post">
+                  <div class="post-header">
+                    <div class="post-avatar"><%= post.author ? post.author.split(' ').map(n => n[0]).join('').toUpperCase() : 'SYS' %></div>
+                    <div class="post-info">
+                      <div class="post-author"><%= post.author || 'Sistema Positivamente' %></div>
+                      <div class="post-time"><%= new Date(post.created_at).toLocaleString('pt-BR') %></div>
+                    </div>
+                  </div>
+                  <div class="post-content">
+                    <%= post.content %>
+                  </div>
+                  <div class="post-actions">
+                    <form action="/posts/<%= post.id %>/like" method="POST" style="display:inline;">
+                      <button type="submit" class="action-btn">
+                        <i class="fas fa-heart"></i>
+                        <span class="count"><%= post.likes || 0 %></span>
+                      </button>
+                    </form>
+                    <button class="action-btn">
+                      <i class="fas fa-comment"></i>
+                      <span class="count"><%= post.comments_count || 0 %></span>
+                    </button>
+                    <button class="action-btn">
+                      <i class="fas fa-share"></i>
+                      <span class="count"><%= post.shares || 0 %></span>
+                    </button>
+                  </div>
+                </div>
+              <% }); %>
+            <% } %>
+          </div>
+        </section>
+      </div>
+
+      <aside class="right-sidebar">
+        <div class="widget">
+          <h3 class="widget-title">Sistema de Indicações!</h3>
+          <div class="achievement">
+            <i class="fas fa-trophy"></i>
+            <div class="achievement-desc">Ganhe R$ 10,00 por cada indicação</div>
+          </div>
+          <div class="form-group" style="margin-top: 1rem;">
+            <label>Seu código:</label>
+            <input type="text" value="<%= user.referral_code %>" readonly style="font-weight: bold;">
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="legal-footer">
+      <div class="legal-footer-inner">
+        <small>&copy; 2026 Positivamente. Todos os direitos reservados.</small>
+        <nav class="legal-links" aria-label="Links legais">
+          <a href="/termos">Termos</a>
+          <a href="/privacidade">Privacidade</a>
+          <a href="/exclusao">Exclusão de Dados</a>
+        </nav>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

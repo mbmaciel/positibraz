@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anamnese - Positivamente</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/index.css">
+</head>
+<body>
+  <div id="appContainer" class="app-container">
+    <header class="header">
+      <div class="logo">
+        <i class="fas fa-leaf"></i>
+        Positivamente
+      </div>
+      <div class="user-menu">
+        <a href="/" class="back-link"><i class="fas fa-arrow-left"></i> Voltar</a>
+        <div class="user-avatar"><%= currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase() %></div>
+        <a href="/logout" class="logout-link" title="Sair"><i class="fas fa-sign-out-alt"></i></a>
+      </div>
+    </header>
+
+    <main class="main-layout">
+      <div class="main-content" style="margin: 0 auto;">
+        <section class="content-section active">
+          <div class="section-header">
+            <i class="fas fa-clipboard-list"></i>
+            <div>
+              <h2 class="section-title">Anamnese</h2>
+              <p class="section-subtitle">Questionário médico para personalizar suas recomendações</p>
+            </div>
+          </div>
+
+          <form action="/anamnese" method="POST">
+            <div class="form-grid">
+              <div class="form-section">
+                <h3>Dados Pessoais</h3>
+                <div class="form-group">
+                  <label for="anamneseAge">Idade</label>
+                  <input type="number" id="anamneseAge" name="age" min="18" max="100" value="<%= anamnese ? anamnese.age : '' %>">
+                </div>
+                <div class="form-group">
+                  <label for="anamneseSex">Sexo</label>
+                  <select id="anamneseSex" name="sex">
+                    <option value="">Selecione...</option>
+                    <option value="masculino" <%= anamnese && anamnese.sex === 'masculino' ? 'selected' : '' %>>Masculino</option>
+                    <option value="feminino" <%= anamnese && anamnese.sex === 'feminino' ? 'selected' : '' %>>Feminino</option>
+                    <option value="outro" <%= anamnese && anamnese.sex === 'outro' ? 'selected' : '' %>>Outro</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="anamneseWeight">Peso (kg)</label>
+                  <input type="number" id="anamneseWeight" name="weight" min="30" max="300" step="0.1" value="<%= anamnese ? anamnese.weight : '' %>">
+                </div>
+                <div class="form-group">
+                  <label for="anamneseHeight">Altura (cm)</label>
+                  <input type="number" id="anamneseHeight" name="height" min="100" max="250" value="<%= anamnese ? anamnese.height : '' %>">
+                </div>
+              </div>
+
+              <div class="form-section">
+                <h3>Histórico de Tabagismo</h3>
+                <div class="form-group">
+                  <label for="smokingTime">Fumante há quanto tempo?</label>
+                  <select id="smokingTime" name="smoking_time">
+                    <option value="">Selecione...</option>
+                    <option value="menos-1-ano" <%= anamnese && anamnese.smoking_time === 'menos-1-ano' ? 'selected' : '' %>>Menos de 1 ano</option>
+                    <option value="1-5-anos" <%= anamnese && anamnese.smoking_time === '1-5-anos' ? 'selected' : '' %>>1 a 5 anos</option>
+                    <option value="6-10-anos" <%= anamnese && anamnese.smoking_time === '6-10-anos' ? 'selected' : '' %>>6 a 10 anos</option>
+                    <option value="11-20-anos" <%= anamnese && anamnese.smoking_time === '11-20-anos' ? 'selected' : '' %>>11 a 20 anos</option>
+                    <option value="mais-20-anos" <%= anamnese && anamnese.smoking_time === 'mais-20-anos' ? 'selected' : '' %>>Mais de 20 anos</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="cigarettesPerDay">Cigarros por dia</label>
+                  <input type="number" id="cigarettesPerDay" name="cigarettes_per_day" min="1" max="100" value="<%= anamnese ? anamnese.cigarettes_per_day : '' %>">
+                </div>
+                <div class="form-group">
+                  <label for="quitAttempts">Tentativas anteriores de parar</label>
+                  <input type="number" id="quitAttempts" name="quit_attempts" min="0" max="50" value="<%= anamnese ? anamnese.quit_attempts : '' %>">
+                </div>
+              </div>
+
+              <div class="form-section">
+                <h3>Saúde</h3>
+                <div class="form-group">
+                  <label for="heartProblems">Tem problemas cardíacos?</label>
+                  <select id="heartProblems" name="heart_problems">
+                    <option value="">Selecione...</option>
+                    <option value="sim" <%= anamnese && anamnese.heart_problems === 'sim' ? 'selected' : '' %>>Sim</option>
+                    <option value="nao" <%= anamnese && anamnese.heart_problems === 'nao' ? 'selected' : '' %>>Não</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="medications">Medicamentos em uso</label>
+                  <textarea id="medications" name="medications" rows="3" placeholder="Liste os medicamentos que você usa regularmente"><%= anamnese ? anamnese.medications || '' : '' %></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="allergies">Alergias</label>
+                  <textarea id="allergies" name="allergies" rows="2" placeholder="Descreva suas alergias, se houver"><%= anamnese ? anamnese.allergies || '' : '' %></textarea>
+                </div>
+              </div>
+
+              <div class="form-section">
+                <h3>Contexto Social</h3>
+                <div class="form-group">
+                  <label for="familySmokers">Há fumantes na família?</label>
+                  <select id="familySmokers" name="family_smokers">
+                    <option value="">Selecione...</option>
+                    <option value="sim" <%= anamnese && anamnese.family_smokers === 'sim' ? 'selected' : '' %>>Sim</option>
+                    <option value="nao" <%= anamnese && anamnese.family_smokers === 'nao' ? 'selected' : '' %>>Não</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="otherDrugs">Usa outras drogas?</label>
+                  <select id="otherDrugs" name="other_drugs">
+                    <option value="">Selecione...</option>
+                    <option value="sim" <%= anamnese && anamnese.other_drugs === 'sim' ? 'selected' : '' %>>Sim</option>
+                    <option value="nao" <%= anamnese && anamnese.other_drugs === 'nao' ? 'selected' : '' %>>Não</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="socialSupport">Apoio familiar/social</label>
+                  <select id="socialSupport" name="social_support">
+                    <option value="">Selecione...</option>
+                    <option value="muito" <%= anamnese && anamnese.social_support === 'muito' ? 'selected' : '' %>>Muito apoio</option>
+                    <option value="moderado" <%= anamnese && anamnese.social_support === 'moderado' ? 'selected' : '' %>>Apoio moderado</option>
+                    <option value="pouco" <%= anamnese && anamnese.social_support === 'pouco' ? 'selected' : '' %>>Pouco apoio</option>
+                    <option value="nenhum" <%= anamnese && anamnese.social_support === 'nenhum' ? 'selected' : '' %>>Nenhum apoio</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-save">Salvar Anamnese</button>
+          </form>
+        </section>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
